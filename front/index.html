@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Upload Image Example</title>
+</head>
+<body>
+    <form id="imageForm">
+        <input type="file" id="imageInput" accept="image/*" required>
+    </form>
+    <div id="responseMessage"></div>
+
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function() {
+            const file = this.files[0];
+
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                // Example of sending the image to a server
+                fetch('/process-image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Display the response message
+                    document.getElementById('responseMessage').innerText = JSON.stringify(data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    document.getElementById('responseMessage').innerText = 'Error: ' + error.message;
+                });
+            } else {
+                alert('Please select an image to send.');
+            }
+        });
+    </script>
+</body>
+</html>
+
